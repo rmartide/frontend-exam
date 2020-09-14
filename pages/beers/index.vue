@@ -6,8 +6,8 @@
 			:total-rows="rows"
 			:per-page="perPage"
 			:limit="limit"
-            first-number
-            last-number
+			first-number
+			last-number
 			aria-controls="my-table"
 			@change="fetchPage"
 			align="center"
@@ -15,13 +15,10 @@
 		<div class="d-flex flex-wrap">
 			<div v-for="beer in beers" :key="beer.id" class="col-3 text-center align-self-start mt-4 mb-4">
 				<img :src="beer.image_url" width="30%" height="30%" />
-				<ul>
-                    <li>{{ beer.name }}</li>
-                    <li>{{ beer.tagline }}</li>
-                    <li>{{ beer.first_brewed }}</li>
-                    <li>{{ beer.abv }}</li>
-                    
-                </ul>
+				<div>{{ beer.name }}</div>
+				<div>{{ beer.tagline }}</div>
+				<div>{{ beer.first_brewed }}</div>
+				<div>{{ beer.abv }}</div>
 			</div>
 		</div>
 		<b-pagination
@@ -31,10 +28,10 @@
 			:limit="limit"
 			aria-controls="my-table"
 			@change="fetchPage"
-            first-number
-            last-number
+			first-number
+			last-number
 			align="center"
-            class="mt-4"
+			class="mt-4"
 		></b-pagination>
 	</div>
 </template>
@@ -55,10 +52,10 @@ export default {
 	},
 	methods: {
 
-        // VER SI LA PÁGINA ESTÁ EN LA STORE Y SI NO SE CARGA
+		// VER SI LA PÁGINA ESTÁ EN LA STORE Y SI NO SE CARGA
 
 		async fetchPage(currentPage) {
-			this.beers = await fetch(`https://api.punkapi.com/v2/beers?page=${currentPage}&per_page=20`).then(res =>
+			this.beers = await this.$api.getBeers(currentPage).then(res =>
 				res.json()
 			)
 		}
