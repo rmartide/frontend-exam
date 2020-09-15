@@ -27,6 +27,10 @@
 		<div class="alert alert-danger mt-1" v-show="fetchError">
 			<small class="text-danger">Se ha producido un error al enviar el formulario, inténtelo más tarde.</small>
 		</div>
+
+		<div class="alert alert-success mt-1" v-show="fetchSuccess">
+			<small class="text-success">El perfil se ha almacenado con éxito</small>
+		</div>
 	</form>
 </template>
 
@@ -40,7 +44,8 @@ export default {
 			nameError: null,
 			emailError: null,
 			phoneError: null,
-			fetchError: null
+			fetchError: null,
+			fetchSuccess: null
 		}
 	},
 	methods: {
@@ -62,6 +67,8 @@ export default {
 
 			if (!this.name) {
 				this.nameError = 'El nombre es obligatorio.';
+			} else if (!this.validName(this.name)) {
+				this.nameError = 'El nombre solo puede contener carácteres alfabéticos o guión(-)';
 			}
 
 			if (this.isValidForm()) {
@@ -72,7 +79,10 @@ export default {
 				})
 					.then(response => response.json())
 					.catch(() => this.fetchError = true)
-					.then(json => console.log(json));
+					.then(json => {
+						localStorage.setItem('profile', JSON.stringify(json));
+						this.fetchSuccess = true;
+					});
 			}
 
 			e.preventDefault();
@@ -84,11 +94,15 @@ export default {
 		validPhone(phone) {
 			return /^[0-9\s]*$/.test(phone);
 		},
+		validName(name) {
+			return /^[a-zA-Z-]*$/.test(name);
+		},
 		resetErrors() {
 			this.nameError = null;
 			this.emailError = null;
 			this.phoneError = null;
 			this.fetchError = null;
+			this.fetchSuccess = null;
 		},
 		isValidForm() {
 			return this.nameError === null && this.emailError === null && this.phoneError === null;

@@ -1,3 +1,5 @@
+// Module to store extract the calls to the services
+
 export default {
 	getBeers(currentPage) {
 		return fetch(`https://api.punkapi.com/v2/beers?page=${currentPage}&per_page=20`);
